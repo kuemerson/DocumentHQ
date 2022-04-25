@@ -1,0 +1,538 @@
+﻿<Window x:Class="DocumentHQ.Views.ShellWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DocumentHQ.Views"
+        xmlns:uc="clr-namespace:DocumentHQ.Views.UserControls"
+        xmlns:vm="clr-namespace:DocumentHQ.ViewModels"
+        mc:Ignorable="d"
+        WindowStyle="None"        
+        Title="DocumentHQ" Height="450" Width="800"
+        ResizeMode="CanResizeWithGrip" AllowsTransparency="True"
+        Background="#ffeaa7">
+
+    <Window.Resources>
+        <vm:ShellViewModel x:Key="shellVM"/>
+    </Window.Resources>
+    <Grid>
+        <!--All dock panel items can access shellVM commands-->
+        <DockPanel DataContext="{StaticResource shellVM}">
+            <!--Window controls and menu items-->
+            <Grid HorizontalAlignment="Stretch"
+                  DockPanel.Dock="Top"
+                  Background="#e17055"
+                  MouseDown="Border_MouseDown"
+                  Margin="0,-3,0,0">
+
+
+                <!--window controls and menu-->
+                <StackPanel HorizontalAlignment="Left"
+                            Orientation="Horizontal" >
+                    <Label Content="DocumentHQ"
+                           Foreground="#ffeaa7"
+                           FontWeight="SemiBold"/>
+                    <Menu Background="#e17055"
+                          BorderThickness="0"
+                          VerticalAlignment="Center">
+                        <MenuItem Header="File"
+                                  Background="#e17055">
+                            <MenuItem Header="New Semester"
+                                      Command="{Binding NewSemesterCommand}"/>
+                            <!---->
+                            <MenuItem Header="New Course"
+                                      Command="{Binding NewCourseCommand}"
+                                      CommandParameter="{Binding SelectedSemester}"/>
+                            <MenuItem Header="Save"
+                                      Click="Save_Click"/>
+                            <Separator/>
+                            <MenuItem Header="Exit"
+                                      Click="CloseButton_Click"/>
+                        </MenuItem>
+                        <MenuItem Header="Edit">
+                            <MenuItem Header="Edit Course Info"/>
+                            <MenuItem Header="Delete Semester"
+                                      Command="{Binding DelSemesterCommand}"
+                                      CommandParameter="{Binding SelectedSemester}"/>
+                            <MenuItem Header="Delete Course"
+                                      Command="{Binding DelCourseCommand}"
+                                      CommandParameter="{Binding SelectedCourse}"/>
+                            <MenuItem Header="Delete Shortcut"
+                                      Command="{Binding DelLinkCommand}"
+                                      CommandParameter="{Binding SelectedShortCut}"/>
+                            <MenuItem Header="Delete Book"
+                                      Command="{Binding DelBookCommand}"
+                                      CommandParameter="{Binding SelectedBook}"/>
+                        </MenuItem>
+                        <MenuItem Header="View">
+                            <MenuItem Header="Course View"/>
+                            <MenuItem Header="Schedule View"/>
+                        </MenuItem>
+
+                    </Menu>
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Right"
+                            Orientation="Horizontal">
+                    <Button Width="20"
+                            Height="20"
+                            Content="🗕"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Foreground="#ffeaa7"
+                            FontWeight="Bold"
+                            Click="ButtonMinimize_Click"/>
+
+                    <Button Width="20"
+                            Height="20"
+                            Content="🗖"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Foreground="#ffeaa7"
+                            FontWeight="Bold"
+                            Click="ButtonMaximize_Click" />
+
+                    <Button Width="20"
+                            Height="20"
+                            Content="X"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Foreground="#ffeaa7"
+                            FontWeight="Bold"
+                            Click="CloseButton_Click"/>
+
+
+                </StackPanel>
+
+
+            </Grid>
+            <!--Gave up on getting tabs to work correctly with the bindings I wanted. Kept the code for reference-->
+            <!--<Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="25"/>
+                </Grid.RowDefinitions>
+
+                <TabControl Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" 
+                            Background="#ffeaa7" 
+                            TabStripPlacement="Left"
+                            BorderThickness="1">
+                    <TabControl.Resources>
+                        <Style TargetType="{x:Type TabItem}">
+                            <Setter Property="HeaderTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <ContentPresenter Content="{TemplateBinding Content}">
+                                            <ContentPresenter.LayoutTransform>
+                                                <RotateTransform Angle="270" />
+                                            </ContentPresenter.LayoutTransform>
+                                        </ContentPresenter>
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="TabItem">
+                                        <Border Name="Border"
+                                                BorderThickness="1"
+                                                CornerRadius="2" 
+                                                Margin="0,-1,0,0"
+                                                MinHeight="50">
+                                            <ContentPresenter x:Name="ContentSite"
+                                                              VerticalAlignment="Center"
+                                                              HorizontalAlignment="Center"
+                                                              ContentSource="Header"
+                                                              Margin="3,0"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter TargetName="Border" Property="Background" Value="#e17055" />
+                                            </Trigger>
+                                            <Trigger Property="IsSelected" Value="False">
+                                                <Setter TargetName="Border" 
+                                                        Property="Background" Value="#fab1a0" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </TabControl.Resources>
+                    <TabItem Header="test"/>
+                    <TabItem Header="test"/>
+                    <TabItem Header="test"/>
+                </TabControl>
+            </Grid>-->
+            <StackPanel DockPanel.Dock="Bottom"
+                        Background="#e17055"
+                        Height="25">
+
+            </StackPanel>
+            <!--List view for semsester user controls-->
+            <ListView DockPanel.Dock="Left"
+                      Width="auto"
+                      Background="#ffeaa7"
+                      BorderThickness="0"
+                      SelectedValue="{Binding SelectedSemester, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding SemesterModels}"
+                      Margin="-4,0">
+                <ListView.ItemTemplate >
+                    <DataTemplate>
+                        <!--<TextBlock Text="{Binding Name}"/>-->
+                        <uc:SemesterUC SemesterModel="{Binding}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+
+            </ListView>
+            <!--List view for course user controls-->
+            <ListView DockPanel.Dock="Left"
+                      Width="auto"
+                      Background="#ffeaa7"
+                      BorderThickness="0"
+                      SelectedValue="{Binding SelectedCourse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding CourseModels}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <uc:CourseUC CourseModel="{Binding}"/>
+                        <!--<TextBlock Text="{Binding Title}"/>-->
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+
+            </ListView>
+            <!--TODO: Move all of this grid into user control to only display when course selected. On second thought maybe don't. Maybe better to just populate list views-->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!--Shortcut border-->
+                <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+                Margin="5"
+                BorderThickness="3"
+                BorderBrush="#e17055"
+                CornerRadius="10">
+                    <DockPanel>
+                        <Border DockPanel.Dock="Top"
+                                CornerRadius="9,9,0,0"
+                                BorderThickness="0,0,0,1"
+                                BorderBrush="#e17055">
+                            <TextBlock Text="Shortcuts"
+                                       Foreground="#e17055"
+                                       HorizontalAlignment="Stretch"
+                                       TextAlignment="Center"
+                                       FontSize="30"/>
+                        </Border>
+                        <ListView x:Name="shortcutsLV"
+                                  AllowDrop="True"
+                                  PreviewDrop="shortcutsLV_PreviewDrop"
+                                  PreviewDragOver="shortcutsLV_PreviewDragOver"
+                                  SelectedValue="{Binding SelectedShortCut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  ItemsSource="{Binding ShortcutModels}"
+                                  HorizontalContentAlignment="Stretch"
+                                  Background="Transparent"
+                                  BorderThickness="0">
+                            <!--Shortcut label - move to user control and bind same as course-->
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <uc:ShortcutsUC ShortcutModel="{Binding}"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <EventSetter Event="MouseDoubleClick" 
+                                                 Handler="Shortcut_MouseDoubleClick"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+
+                        </ListView>
+                    </DockPanel>
+                </Border>
+                <!--Quick Note Border-->
+                <Border Grid.Column="1" Grid.Row="0"
+                Margin="5"
+                BorderThickness="3"
+                BorderBrush="#e17055"
+                CornerRadius="10">
+                    <DockPanel>
+                        <Border DockPanel.Dock="Top"
+                                CornerRadius="9,9,0,0"
+                                BorderThickness="0,0,0,1"
+                                BorderBrush="#e17055">
+                            <TextBlock Text="Quick Notes"
+                                       Foreground="#e17055"
+                                       HorizontalAlignment="Stretch"
+                                       TextAlignment="Center"
+                                       FontSize="30"/>
+                        </Border>
+                        <RichTextBox x:Name="quickNotesRTB"
+                                     Background="Transparent"
+                                     BorderThickness="0">
+                        </RichTextBox>
+
+                    </DockPanel>
+                </Border>
+                <!--Books border-->
+                <Border Grid.Column="1" Grid.Row="1"
+                Margin="5"
+                BorderThickness="3"
+                BorderBrush="#e17055"
+                CornerRadius="10">
+                    <DockPanel>
+                        <Border DockPanel.Dock="Top"
+                                CornerRadius="9,9,0,0"
+                                BorderThickness="0,0,0,1"
+                                BorderBrush="#e17055">
+                            <TextBlock Text="Books"
+                                       Foreground="#e17055"
+                                       HorizontalAlignment="Stretch"
+                                       TextAlignment="Center"
+                                       FontSize="30"/>
+                        </Border>
+                        <ListView x:Name="booksLV"
+                                  AllowDrop="True"
+                                  PreviewDrop="booksLV_PreviewDrop"
+                                  SelectedValue="{Binding SelectedBook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  ItemsSource="{Binding BookModels}"
+                                  HorizontalContentAlignment="Stretch"
+                                  Background="Transparent"
+                                  BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <uc:BooksUC BookModel="{Binding}"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <EventSetter Event="MouseDoubleClick" 
+                                                 Handler="Link_MouseDoubleClick"/>
+
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </DockPanel>
+
+
+                </Border>
+                <!--My Tasks border-->
+                <Border Grid.Column="2" Grid.Row="0"
+                Margin="5"
+                BorderThickness="3"
+                BorderBrush="#e17055"
+                CornerRadius="10">
+                    <DockPanel>
+                        <Border DockPanel.Dock="Top"
+                                CornerRadius="9,9,0,0"
+                                BorderThickness="0,0,0,1"
+                                BorderBrush="#e17055">
+                            <TextBlock Text="My Tasks"
+                                       Foreground="#e17055"
+                                       HorizontalAlignment="Stretch"
+                                       TextAlignment="Center"
+                                       FontSize="30"/>
+                        </Border>
+                        <RichTextBox x:Name="myTasksRTB"
+                                     Background="Transparent"
+                                     BorderThickness="0">
+
+                        </RichTextBox>
+
+                    </DockPanel>
+                </Border>
+                <!--Course Info border-->
+                <Border Grid.Column="2" Grid.Row="1"
+                Margin="5"
+                BorderThickness="3"
+                BorderBrush="#e17055"
+                CornerRadius="10">
+                    <DockPanel>
+                        <Border DockPanel.Dock="Top"
+                                CornerRadius="9,9,0,0"
+                                BorderThickness="0,0,0,1"
+                                BorderBrush="#e17055">
+                            <TextBlock Text="Course Info"
+                                       Foreground="#e17055"
+                                       HorizontalAlignment="Stretch"
+                                       TextAlignment="Center"
+                                       FontSize="30"/>
+                        </Border>
+                        
+                        <!--Move to user control!!!!!! and set width with grid cols not prop-->
+                        <DockPanel DataContext="{Binding SelectedCourse}"
+                                    Background="Transparent">
+                            <StackPanel Orientation="Horizontal"
+                                        DockPanel.Dock="Top">
+                                <Label Content="Subject:"
+                                       Margin="5,0,0,0"
+                                       HorizontalAlignment="Left"/>
+                                <TextBlock Text="{Binding Subject, Mode=TwoWay}"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
+                                           Margin="5,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal"
+                                        DockPanel.Dock="Top">
+                                <Label Content="Title:"
+                                       Margin="5,0,0,0"
+                                       HorizontalAlignment="Left"/>
+                                <TextBlock Text="{Binding Title, Mode=TwoWay}"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
+                                           Margin="5,0,0,0"/>
+                                
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal"
+                                        DockPanel.Dock="Top">
+                                <Label Content="Course Number:"
+                                       Margin="5,0,0,0"
+                                       HorizontalAlignment="Left"/>
+                                <TextBlock Text="{Binding CourseNumber, Mode=TwoWay}"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
+                                           Margin="5,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal"
+                                        DockPanel.Dock="Top">
+                                <Label Content="Start Time:"
+                                       Margin="5,0,0,0"
+                                       HorizontalAlignment="Left"/>
+                                <TextBlock Text="{Binding StartTime, Mode=TwoWay}"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
+                                           Margin="5,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal"
+                                        DockPanel.Dock="Top">
+                                <Label Content="End Time:"
+                                       Margin="5,0,0,0"
+                                       HorizontalAlignment="Left"/>
+                                <TextBlock Text="{Binding EndTime, Mode=TwoWay}"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
+                                           Margin="5,0,0,0"/>
+                            </StackPanel>
+                            
+                        </DockPanel>
+                        
+                    </DockPanel>
+                </Border>
+            </Grid>
+        </DockPanel>
+        <!--Hidden course info input grid-->
+        <Grid DataContext="{StaticResource shellVM}"
+              Visibility="{Binding Source={StaticResource shellVM}, Path=IsVisible}">
+            <Grid Background="Black" Opacity="0.5"/>
+            <Border Width="350"
+                    MinHeight="250"
+                    Background="#fab1a0"
+                    BorderBrush="Black"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                <DockPanel>
+                    <Grid DockPanel.Dock="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="170"/>
+                            <ColumnDefinition Width="170"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel DataContext="{Binding SelectedCourse}"
+                                    Height="auto"
+                                    Grid.Column="0">
+                            
+                            <Label Content="Course Title:"
+                                   Margin="5,0,0,0"/>
+                            <TextBox Text="{Binding Title, Mode=TwoWay}"
+                                     Width="150"
+                                     HorizontalAlignment="Left"
+                                     Margin="5,0,0,0"/>
+                            
+                            <Label Content="Subject:"
+                                   Margin="5,0,0,0"/>
+                            <TextBox Text="{Binding Subject, Mode=TwoWay}"
+                                 Width="150"
+                                 HorizontalAlignment="Left"
+                                 Margin="5,0,0,0"/>
+
+                            <Label Content="Course Number:"
+                                   Margin="5,0,0,0"/>
+                            <TextBox Text="{Binding CourseNumber, Mode=TwoWay}"
+                                 Width="150"
+                                 HorizontalAlignment="Left"
+                                 Margin="5,0,0,0"/>
+
+                            <Label Content="Meeting Location:"
+                                   Margin="5,0,0,0"/>
+                            <TextBox Text="{Binding Location, Mode=TwoWay}"
+                                 Width="150"
+                                 HorizontalAlignment="Left"
+                                 Margin="5,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel DataContext="{Binding SelectedCourse}"
+                                    Height="auto"
+                                    Grid.Column="1">
+                            
+                                <Label Content="Start Date:"
+                                   Margin="5,0,0,0"/>
+                                <TextBox Text="{Binding StartDate, Mode=TwoWay}"
+                                         Width="150"
+                                         HorizontalAlignment="Left"
+                                         Margin="5,0,0,0"/>
+
+                                <Label Content="End Date:"
+                                       Margin="5,0,0,0"/>
+                                <TextBox Text="{Binding EndDate, Mode=TwoWay}"
+                                         Width="150"
+                                         HorizontalAlignment="Left"
+                                         Margin="5,0,0,0"/>
+
+                                <Label Content="Start Time:"
+                                       Margin="5,0,0,0"/>
+                                <TextBox Text="{Binding StartTime, Mode=TwoWay}"
+                                             Width="150"
+                                             HorizontalAlignment="Left"
+                                             Margin="5,0,0,0"/>
+
+                                <Label Content="End Time:"
+                                           Margin="5,0,0,0"/>
+                                <TextBox Text="{Binding EndTime, Mode=TwoWay}"
+                                             Width="150"
+                                             HorizontalAlignment="Left"
+                                             Margin="5,0,0,0"/>
+
+                        </StackPanel>
+                    </Grid>
+                    <StackPanel DockPanel.Dock="Bottom"
+                                Height="Auto"
+                                Orientation="Horizontal"
+                                DataContext="{Binding SelectedCourse}"
+                                HorizontalAlignment="Center">
+                        <Button Command="{Binding Source={StaticResource shellVM}, Path=DelCourseCommand}"
+                                CommandParameter="{Binding}"
+                                Margin="25"
+                                Height="30"
+                                MinWidth="100"
+                            Content="Cancel"/>
+                        <Button Command="{Binding Source={StaticResource shellVM}, Path=SaveCourseCommand}"
+                                CommandParameter="{Binding}"
+                                Margin="25"
+                                Height="30"
+                                Content="Save"
+                                MinWidth="100"/>
+                        
+                </StackPanel>
+                </DockPanel>
+            </Border>
+            
+        </Grid>
+    </Grid>
+</Window>

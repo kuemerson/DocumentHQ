@@ -1,0 +1,21 @@
+﻿<Application x:Class="DocumentHQ.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:DocumentHQ"             
+             StartupUri="Views/ShellWindowView.xaml">
+    <Application.Resources>
+        <!--Get rid of stupid defualt light blue backgroud on selected listview items and sets app wide defaults-->
+        <!--<Style TargetType="{x:Type ListViewItem}" x:Key="listItemStyle1">
+            --><!--<Setter Property="Background" Value="Red"/>--><!--
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Red"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="False">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>-->
+       
+    </Application.Resources>
+</Application>
